@@ -103,7 +103,7 @@ public class FileController {
 			if("localhost".equals(serverName)) {				
 				file = new File(System.getProperty("user.dir") + "/src/main/resources/static/"+ fileDto.getFilePath());
 			}else {
-				file = new File(System.getProperty("user.dir") + "/resources/" + fileDto.getFilePath());
+				file = new File(System.getProperty("user.dir") + "/" + fileDto.getFilePath());
 			}
 		
 			Path path = Paths.get(file.getAbsolutePath());
