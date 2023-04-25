@@ -1,5 +1,6 @@
 package ksmart.ocltest.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -10,6 +11,9 @@ import ksmart.ocltest.interceptor.CommonInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
+	
+	@Value("${files.path}")
+	private String filePath;
 
 	private final CommonInterceptor commonInterceptor;
 	
@@ -31,7 +35,7 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**")
-				.addResourceLocations("file:///" + System.getProperty("user.dir") + "/resources/")
+				.addResourceLocations("file:///c:" + filePath + "resources/")
 				.setCachePeriod(3600)
 				.resourceChain(true)
 				.addResolver(new PathResourceResolver());

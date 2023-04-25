@@ -9,7 +9,6 @@
 		<result property="fileOriginalName" column="file_original_name"/>
 		<result property="filePath" 		column="file_path"/>
 		<result property="fileSize" 		column="file_size"/>
-		<result property="fileIsLocal" 		column="file_islocal"/>
 	</resultMap>
 	
 	<insert id="addFile" parameterType="list">
@@ -20,7 +19,6 @@
 			,file_original_name
 			,file_path
 			,file_size
-			,file_islocal
 		)VALUES
 		<foreach collection="list" item="data" separator=",">
 		( 
@@ -29,7 +27,6 @@
 			,#{data.fileOriginalName}
 			,#{data.filePath}
 			,#{data.fileSize}
-			,#{data.fileIsLocal}
 		)
 		</foreach>
 	</insert>
@@ -43,9 +40,6 @@
 			,file_size
 		FROM
 			tb_file
-		<trim prefix="WHERE" prefixOverrides="AND |OR ">
-			file_islocal = #{fileIsLocal};
-		</trim>
 	</select>
 
 	<select id="getFileInfoByIdx" parameterType="string" resultMap="fileResultMap">
@@ -60,9 +54,6 @@
 		<trim prefix="WHERE" prefixOverrides="AND |OR ">
 			<if test="fileIdx != null and fileIdx != ''">
 				file_idx = #{fileIdx}
-			</if>
-			<if test="fileIsLocal != null and fileIsLocal != ''">
-				AND file_islocal = #{fileIsLocal};
 			</if>
 		</trim>
 	</select>

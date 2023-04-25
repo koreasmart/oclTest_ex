@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +39,8 @@ public class FileController {
 	
 	private static final Logger log = LoggerFactory.getLogger(FileController.class);
 
+	@Value("${files.path}")
+	private String filePath;
 	
 	private FileService fileService;
 	
@@ -54,34 +57,17 @@ public class FileController {
 	}
 	@PostMapping("/file/upload")
 	public String archiveUpload(@RequestParam MultipartFile[] uploadfile, Model model, HttpServletRequest request) {
-		String serverName = request.getServerName();
-		log.info("{} <<<< serverName", serverName);
-		log.info("{} <<<< user 디렉토리", System.getProperty("user.dir"));
-		String fileRealPath = "";
-		boolean isLocalhost = true;
 		
-		if("localhost".equals(serverName)) {				
-			fileRealPath = System.getProperty("user.dir") + "/src/main/resources/static/";
-			//fileRealPath = request.getSession().getServletContext().getRealPath("/WEB-INF/classes/static/");
-		}else {
-			//fileRealPath = request.getSession().getServletContext().getRealPath("/WEB-INF/classes/static/");
-			isLocalhost = false;
-			fileRealPath = System.getProperty("user.dir") + "/resources/";
-		}
-		fileService.fileUpload(uploadfile, fileRealPath, isLocalhost);
+		fileService.fileUpload(uploadfile, filePath);
 		
 		return "redirect:/";
 	}
 	
 	@GetMapping("/file/downloadView")
 	public String archiveDownloadView(Model model, HttpServletRequest request) {
-		String serverName = request.getServerName();
-		boolean fileIsLocal = true;
-		
-		if(!"localhost".equals(serverName)) fileIsLocal = false;
 		
 		model.addAttribute("title", "파일 리스트");
-		model.addAttribute("fileList", fileService.getFileList(fileIsLocal));
+		model.addAttribute("fileList", fileService.getFileList());
 		return "file/downloadView";
 	}
 	
@@ -91,20 +77,11 @@ public class FileController {
 												   ,HttpServletRequest request
 												   ,HttpServletResponse response) throws URISyntaxException{
 		
-		String serverName = request.getServerName();
-		
-		boolean fileIsLocal = true;
-		
-		if(!"localhost".equals(serverName)) fileIsLocal = false;	
 		
 		if(fileIdx != null) {
-			FileDto fileDto = fileService.getFileInfoByIdx(fileIdx, fileIsLocal);
-			File file;
-			if("localhost".equals(serverName)) {				
-				file = new File(System.getProperty("user.dir") + "/src/main/resources/static/"+ fileDto.getFilePath());
-			}else {
-				file = new File(System.getProperty("user.dir") + "/" + fileDto.getFilePath());
-			}
+			FileDto fileDto = fileService.getFileInfoByIdx(fileIdx);
+			
+			File file = new File(filePath + fileDto.getFilePath());
 		
 			Path path = Paths.get(file.getAbsolutePath());
 	        Resource resource;

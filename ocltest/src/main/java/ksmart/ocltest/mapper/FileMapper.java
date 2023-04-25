@@ -11,7 +11,7 @@ public interface FileMapper {
 
 	public int addFile(List<FileDto> fileList); 
 	
-	public List<FileDto> getFileList(boolean fileIsLocal);
+	public List<FileDto> getFileList();
 	
-	public FileDto getFileInfoByIdx(String fileIdx, boolean fileIsLocal);
+	public FileDto getFileInfoByIdx(String fileIdx);
 }

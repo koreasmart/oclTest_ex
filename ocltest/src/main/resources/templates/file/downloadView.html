@@ -23,7 +23,7 @@
 					<a th:href="@{/file/download(fileIdx=${l.fileIdx})}">다운로드</a>
 				</td>
 				<td>
-					<img th:src="@{'/' + ${l.filePath}}" th:alt="${l.fileOriginalName}" style="width: 100px;"/>
+					<img th:src="@{|/${l.filePath}|}" th:alt="${l.fileOriginalName}" style="width: 100px;"/>
 				</td>
 			</tr>
 			<tr th:unless="${not #lists.isEmpty(fileList)}">

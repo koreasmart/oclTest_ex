@@ -19,7 +19,7 @@ import ksmart.ocltest.dto.FileDto;
 @Component
 public class FileUtil {
 	
-	public List<FileDto> parseFileInfo(MultipartFile[] uploadfile, String fileRealPath, boolean isLocalhost){
+	public List<FileDto> parseFileInfo(MultipartFile[] uploadfile, String fileRealPath){
 		
 		// 파일이 존재하지 않은 경우 
 		if(ObjectUtils.isEmpty(uploadfile)){
@@ -55,21 +55,17 @@ public class FileUtil {
 						else if(contentType.contains("image/gif")) {
 							originalFileExtension = ".gif";
 						}
-						if(isLocalhost) {							
-							directory = "images" + File.separator;
-						}else {
-							directory = "resource" + File.separator + "images" + File.separator;							
-						}
+												
+						directory = "images" + File.separator;
+						
 					}else {
-						if(isLocalhost) {
-							directory = "files" + File.separator;
-						}else {							
-							directory = "resource" + File.separator + "files" + File.separator;							
-						}
+						
+						directory = "files" + File.separator;
+						
 					}
 					
 					// Paths 클래스를 통한 파일의 경로 ( 주소의 / 경로와 실제 os의 경로 \ 와 차이)
-					path = Paths.get(fileRealPath + directory + current.format(format)).toString();
+					path = Paths.get(fileRealPath + "resources/" + directory + current.format(format)).toString();
 			    	
 					// 파일 경로 셋팅
 			    	File file = new File(path);
@@ -115,12 +111,10 @@ public class FileUtil {
 					fileDto.setFileSize(multipartFile.getSize());
 					fileDto.setFileOriginalName(multipartFile.getOriginalFilename());
 					fileDto.setFileNewName(resultFileName);
-					fileDto.setFileIsLocal(isLocalhost);
-					if(isLocalhost) {						
-						fileDto.setFilePath(directory+ current.format(format)+ File.separator + resultFileName);
-					}else {						
-						fileDto.setFilePath("resources"+ File.separator + directory + current.format(format)+ File.separator + resultFileName);
-					}
+					
+											
+					fileDto.setFilePath("resources"+ File.separator + directory + current.format(format)+ File.separator + resultFileName);
+					
 					fileList.add(fileDto);
 				}
 				

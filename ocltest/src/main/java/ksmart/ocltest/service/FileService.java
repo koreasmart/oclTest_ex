@@ -23,21 +23,21 @@ public class FileService {
 		this.fileMapper = fileMapper;
 	}
 
-	public void fileUpload(MultipartFile[] uploadfile, String fileRealPath, boolean isLocalhost) {
+	public void fileUpload(MultipartFile[] uploadfile, String fileRealPath) {
 		
-		List<FileDto> fileList= fileUtil.parseFileInfo(uploadfile, fileRealPath , isLocalhost);
-		
-		System.out.println(fileList);
-		
+		List<FileDto> fileList= fileUtil.parseFileInfo(uploadfile, fileRealPath);
+				
 		if(fileList != null) fileMapper.addFile(fileList);
 		
 	}
 	
-	public List<FileDto> getFileList(boolean fileIsLocal){
-		return fileMapper.getFileList(fileIsLocal);
+	public List<FileDto> getFileList(){
+		List<FileDto> fileList = fileMapper.getFileList();
+		
+		return fileList;
 	}
 	
-	public FileDto getFileInfoByIdx(String fileIdx, boolean fileIsLocal) {
-		return fileMapper.getFileInfoByIdx(fileIdx, fileIsLocal);
+	public FileDto getFileInfoByIdx(String fileIdx) {
+		return fileMapper.getFileInfoByIdx(fileIdx);
 	}
 }
